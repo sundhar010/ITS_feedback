@@ -2,7 +2,9 @@ import csv
 import tempfile
 import pandas
 import re
+import json
 
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.template.context_processors import csrf
@@ -12,6 +14,25 @@ from django.db import IntegrityError
 
 from .forms import UserForm,FileForm
 from .models import Student, Professor, Admin
+from django.contrib.auth import authenticate
+from django.http import JsonResponse
+from django.views.generic import View
+
+#def addCorsHeaders(theHttpResponse):
+#    if theHttpResponse and isinstance(theHttpResponse, HttpResponse):
+
+
+@csrf_exempt
+def mobile_login(request):
+    print (request.POST.get('username'))
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        return JsonResponse({'status':'success'})
+    else:
+        return JsonResponse({'status':'failed'})
 
 # ----------------------------------------------------------------------------------------
 # mylogin_required : It is an authentication function used to check whether a user is logged in or not
@@ -179,3 +200,4 @@ def addAdmin(request):
         context['form'] = form
         context['name'] = 'Adminstrator'
         return render(request,"main/upload.html",context)
+

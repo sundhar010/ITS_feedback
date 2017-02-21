@@ -29,5 +29,7 @@ urlpatterns = [
     url(r'^viewAdmin/$', views.displayAdm, name='home'),
 
     url(r'^viewProf/$', views.displayPro, name='home'),
+    
+    url(r'^api/mobile_login/$', views.mobile_login),
 
 ]
